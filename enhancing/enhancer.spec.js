@@ -9,42 +9,52 @@ const item = {
 // test away!
 describe('enhancer test', () => {
 	describe('repair test', () => {
+		const repair = enhancer.repair(item);
 		it('should return an object', () => {
-			expect(enhancer.repair(item)).toBeDefined();
-			expect(typeof enhancer.repair(item)).toBe('object');
+			expect(repair).toBeDefined();
+			expect(typeof repair).toBe('object');
 		});
 		it('should return object with expected keys', () => {
-			expect(enhancer.repair(item)).toHaveProperty('name');
-			expect(enhancer.repair(item)).toHaveProperty('enhancement');
-			expect(enhancer.repair(item)).toHaveProperty('durability');
+			expect(repair).toHaveProperty('name');
+			expect(repair).toHaveProperty('enhancement');
+			expect(repair).toHaveProperty('durability');
 		});
 		it('should increase durability to 100', () => {
-			expect(enhancer.repair(item).durability).toBe(100);
+			expect(repair.durability).toBe(100);
 		});
 	});
 	describe('success test', () => {
+		const actual = enhancer.succeed(item);
 		it('should increase enhancement by 1', () => {
-			const actual = enhancer.succeed(item);
 			const expected = item.enhancement + 1;
 
-			if (actual < 20) {
+			if (actual.enhancement < 20) {
 				expect(actual.enhancement).toBe(expected);
 			}
 		});
 		it('should not change enhancement level if it is 20', () => {
-			const actual = enhancer.succeed({ ...item, enhancement: 20 });
-
 			expect(actual.enhancement).not.toBeGreaterThan(21);
 		});
 		it('should not change durability', () => {
-			const actual = enhancer.succeed(item);
-
 			expect(actual.durability).toBe(item.durability);
 		});
 	});
 	describe('fail test', () => {
-		it.todo('should decrease by 5 if durability is less than 15');
-		it.todo('should decrease by 10 if durability is 15 or more');
-		it.todo('should decrease 1 if ehancement is 16 or more');
+		const actual = enhancer.fail(item);
+		it('should decrease by 5 if enhancement is less than 15', () => {
+			if (item.enhancement < 15) {
+				expect(actual.durability).toBe(item.durability - 5);
+			}
+		});
+		it('should decrease by 10 if enhancement is 15 or more', () => {
+			if (item.enhancement >= 15) {
+				expect(actual.durability).toBe(item.durability - 10);
+			}
+		});
+		it('should decrease 1 if enhancement is 16 or more', () => {
+			if (item.enhancement > 16) {
+				expect(actual.enhancement).toBe(item.enhancement - 1);
+			}
+		});
 	});
 });
