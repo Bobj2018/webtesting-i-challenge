@@ -57,4 +57,17 @@ describe('enhancer test', () => {
 			}
 		});
 	});
+	describe('get test', () => {
+		const actual = enhancer.get(item);
+		it('should not change name if enhancement is 0', () => {
+			if (item.enhancement === 0) {
+				expect(actual.name).toBe(item.name);
+			}
+		});
+		it('should change the name of the item if the enhancement is greater than 0', () => {
+			if (item.enhancement > 0) {
+				expect(actual.name).toBe(`[+${item.enhancement}] ${item.name}`);
+			}
+		});
+	});
 });
